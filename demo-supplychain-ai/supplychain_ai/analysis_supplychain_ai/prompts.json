@@ -1,0 +1,10 @@
+{
+  "supplierStockouts": "Extract all instances where supplier stockouts caused delays. List the delay durations (in days) and provide a brief count of how many times this occurred. Answer in 2-3 sentences maximum.",
+  "inventoryShortages": "Find all mentions of inventory shortages during picking. Count the occurrences and briefly mention any patterns or specific locations if mentioned. Answer in 1-2 sentences.",
+  "warehouseMislocations": "List all warehouse mislocation incidents where stock was placed in wrong bins. Mention which warehouses (WH-X) had issues if specified, and provide a count. Keep it to 2 sentences.",
+  "packingErrors": "Identify all wrong item shipments caused by SKU mapping errors in warehouse picklists. Provide a count and briefly mention the impact (customer escalations, etc.). Max 2 sentences.",
+  "qualityIssues": "List all batches that failed quality checks and were returned to manufacturing. Include batch numbers if available and provide a total count. Keep response to 2 sentences.",
+  "customsHolds": "Identify all shipments stuck at customs. Briefly mention the main reasons (missing documentation, etc.) and provide a count. Answer in 1-2 sentences.",  
+  "overshipments": "Find all over-shipment incidents. List the excess quantities mentioned (e.g., 20 units, 9 units) and provide a total count of incidents. Answer in 1-2 sentences.",
+  "supplierDocumentation": "Identify all delays caused by missing supplier documentation. Mention which suppliers (Supplier-X) if specified and provide a count of incidents. Max 2 sentences."
+}

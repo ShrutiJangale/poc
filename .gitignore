@@ -1,0 +1,95 @@
+# =========================
+# PYTHON & DJANGO PROJECTS
+# COMMON .GITIGNORE
+# =========================
+
+# ----- Python -----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ----- Virtual Environments -----
+venv/
+env/
+ENV/
+.venv/
+*/venv/
+*/env/
+
+# ----- Databases -----
+db.sqlite3
+db.sqlite3-journal
+supplyChain.db
+*.db
+*.db-journal
+
+# ----- Django Logs -----
+*.log
+local_settings.py
+
+# ----- Environment Files -----
+.env
+.env.local
+.env.*.local
+
+# ----- IDE & Editor Files -----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ----- Static & Media Files -----
+/staticfiles/
+staticfiles/
+media/
+/media/
+
+# ----- JSON / Sensitive Data -----
+log_summaries.json
+question_wise_summaries.json
+*.json.bak
+
+# ----- Testing -----
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ----- Jupyter -----
+.ipynb_checkpoints
+
+# ----- pyenv -----
+.python-version
+
+# ----- Celery -----
+celerybeat-schedule
+celerybeat.pid
+
+# ----- Project Specific -----
+demoSupplyChain/
+
+# =========================
+# END OF COMMON .GITIGNORE
+# =========================

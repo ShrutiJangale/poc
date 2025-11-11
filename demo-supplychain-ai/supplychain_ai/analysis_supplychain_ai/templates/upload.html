@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload File</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+        }
+        .sidebar h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+        .sidebar h2 a { color: inherit; text-decoration: none; }
+        .sidebar-btn {
+            width: 100%;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: left;
+            transition: background-color 0.3s;
+        }
+        .sidebar-btn:hover {
+            background-color: #0056b3;
+        }
+        .sidebar-btn.active {
+            background-color: #0056b3;
+        }
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .content-area {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        .content-area h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        .upload-form {
+            margin-top: 20px;
+        }
+        .file-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .upload-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .upload-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2><a href="{% url 'dashboard' %}">Supply Chain AI</a></h2>
+        <button class="sidebar-btn" onclick="loadFileSelection()">Select File</button>
+        <button class="sidebar-btn active" onclick="loadUpload()">]Upload New Data</button>
+    </div>
+    <div class="main-content">
+        <div class="content-area">
+            <h1>Upload Supply Chain Comments File</h1>
+            <form method="POST" enctype="multipart/form-data" class="upload-form" id="uploadForm">
+                {% csrf_token %}
+                <input type="file" name="file" class="file-input" required accept=".csv,.txt">
+                <button type="submit" class="upload-btn" id="uploadBtn">Upload & Process</button>
+            </form>
+            <div id="progressArea" style="display:none; margin-top:20px; text-align:left;">
+                <div id="progressMsg" style="margin-bottom:8px; color:#333;">Preparing upload…</div>
+                <div style="background:#eee; height:10px; border-radius:5px; overflow:hidden;">
+                    <div id="progressBar" style="background:#007bff; width:0%; height:100%; transition:width 0.2s;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function loadFileSelection() {
+            window.location.href = "{% url 'file_selection' %}";
+        }
+        function loadUpload() {
+            window.location.href = "{% url 'upload_file' %}";
+        }
+        (function(){
+            const form = document.getElementById('uploadForm');
+            const btn = document.getElementById('uploadBtn');
+            const progressArea = document.getElementById('progressArea');
+            const progressBar = document.getElementById('progressBar');
+            const progressMsg = document.getElementById('progressMsg');
+            if (!form) return;
+            form.addEventListener('submit', function(e){
+                e.preventDefault();
+                const fileInput = form.querySelector('input[type="file"]');
+                if (!fileInput.files.length) { return form.submit(); }
+                btn.disabled = true;
+                progressArea.style.display = 'block';
+                progressBar.style.width = '0%';
+                progressMsg.textContent = 'Uploaded file successfully..Categorizing comments…';
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', window.location.href, true);
+                xhr.responseType = 'document';
+                xhr.upload.onprogress = function(ev){
+                    if (ev.lengthComputable) {
+                        const pct = Math.max(1, Math.floor((ev.loaded/ev.total)*100));
+                        progressBar.style.width = pct + '%';
+                    } else {
+                        // Indeterminate animation fallback
+                        progressBar.style.width = '60%';
+                    }
+                };
+                xhr.onload = function(){
+                    progressBar.style.width = '100%';
+                    progressMsg.textContent = 'File uploaded. Categorizing comments…';
+                    // Follow server redirect to results page for the new file
+                    var target = xhr.responseURL || window.location.href;
+                    window.location.href = target;
+                };
+                xhr.onerror = function(){
+                    btn.disabled = false;
+                    progressMsg.textContent = 'Upload failed. Please try again.';
+                    progressBar.style.background = '#dc3545';
+                };
+                const formData = new FormData(form);
+                xhr.send(formData);
+            });
+        })();
+    </script>
+</body>
+</html>

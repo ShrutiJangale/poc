@@ -1,0 +1,12 @@
+django
+pillow
+pymongo
+pdf2image
+pandas
+openpyxl
+scikit-learn
+openai
+python-dotenv
+rapidfuzz
+numpy
+scipy

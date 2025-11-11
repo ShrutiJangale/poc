@@ -1,0 +1,10 @@
+{
+  "supplierStockouts": "Show me all recent delays caused by supplier stockouts",
+  "inventoryShortages": "Where are we seeing inventory shortages during picking?",
+  "warehouseMislocations": "Which warehouses have the most stock mislocation problems?",
+  "packingErrors": "How many wrong items were shipped due to SKU mapping errors?",
+  "qualityIssues": "Which batches failed quality checks and were returned to manufacturing?",
+  "customsHolds": "How many shipments are stuck at customs and why?",
+  "overshipments": "How many times have we shipped more than ordered?",
+  "supplierDocumentation": "Which suppliers are causing delays due to missing documentation?"
+}
