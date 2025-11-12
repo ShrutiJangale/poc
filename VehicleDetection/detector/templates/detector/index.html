@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ergobite | Vehicle Analytics</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a professional look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to complement Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark gray background */
+        }
+        .video-container {
+            background-color: #1f2937; /* Lighter gray for containers */
+            border: 1px solid #374151;
+            aspect-ratio: 16 / 9;
+        }
+        .status-badge {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <!-- Header Section -->
+    <header class="bg-gray-900/50 backdrop-blur-sm border-b border-gray-700/50 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold tracking-tight text-white">
+                <span class="text-cyan-400">Ergobite</span> Vehicle Analytics
+            </h1>
+            <div id="status-indicator" class="flex items-center space-x-2">
+                <span id="status-text" class="text-gray-400 font-medium">Awaiting Video</span>
+                <div id="status-dot" class="h-3 w-3 rounded-full bg-yellow-400"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-10">
+
+        <!-- Main Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            
+            <!-- Control Panel (Left Column) -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                    <h2 class="text-xl font-semibold mb-4 text-white">Select Video File</h2>
+                    <form id="upload-form" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="relative border-2 border-dashed border-gray-600 rounded-lg p-6 text-center cursor-pointer hover:border-cyan-400 transition-colors">
+                            <input type="file" name="video" id="video-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            <div id="upload-prompt">
+                                <svg class="mx-auto h-12 w-12 text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4V12a4 4 0 014-4h12l4 4h12a4 4 0 014 4z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <p class="mt-2 text-sm text-gray-400"><span class="font-semibold text-cyan-400">Click to upload</span> or drag and drop</p>
+                                <p class="text-xs text-gray-500">MP4, MOV, AVI up to 50MB</p>
+                            </div>
+                            <div id="file-name-display" class="hidden text-sm text-gray-300"></div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                    <h2 class="text-xl font-semibold mb-4 text-white">Control Analysis</h2>
+                    <p class="text-gray-400 mb-4 text-sm">Once the video is uploaded, you can start or stop the analysis at any time.</p>
+                    <div class="flex items-center space-x-4">
+                        <button id="start-analysis-btn" disabled class="w-full bg-cyan-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-cyan-500 transition-all disabled:bg-gray-600 disabled:cursor-not-allowed disabled:text-gray-400 flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /></svg>
+                            Start Analysis
+                        </button>
+                        <button id="stop-analysis-btn" class="hidden w-full bg-red-700 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-600 transition-all flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 7.5A2.25 2.25 0 017.5 5.25h9a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25h-9a2.25 2.25 0 01-2.25-2.25v-9z" /></svg>
+                            Stop Analysis
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Analysis Results Display -->
+                <div id="results-container" class="hidden bg-gray-800 p-6 rounded-lg border border-gray-700">
+                    <h2 class="text-xl font-semibold mb-4 text-white">Analysis Results</h2>
+                    <div id="results-list" class="space-y-2">
+                        <!-- Results will be populated here by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Error Message Display -->
+                <div id="error-message" class="hidden bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-lg" role="alert">
+                    <strong class="font-bold">Error:</strong>
+                    <span id="error-text" class="block sm:inline"></span>
+                </div>
+            </div>
+
+            <!-- Video Display Area (Right Column) -->
+            <div class="lg:col-span-3 space-y-4">
+                <div class="relative video-container rounded-lg overflow-hidden flex items-center justify-center">
+                    <video id="original-video" class="hidden w-full h-full object-contain" controls></video>
+                    <img id="processed-stream" class="hidden w-full h-full object-contain" />
+                    <div id="video-placeholder" class="text-center text-gray-500">
+                        <svg class="mx-auto h-24 w-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9A2.25 2.25 0 004.5 18.75z" /></svg>
+                        <p class="mt-2">Video preview will appear here</p>
+                    </div>
+                </div>
+                <p id="analysis-info" class="text-center text-sm text-gray-400 h-5"></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Element References ---
+            const form = document.getElementById('upload-form');
+            const videoInput = document.getElementById('video-input');
+            const startBtn = document.getElementById('start-analysis-btn');
+            const stopBtn = document.getElementById('stop-analysis-btn');
+            const originalVideo = document.getElementById('original-video');
+            const processedStream = document.getElementById('processed-stream');
+            const videoPlaceholder = document.getElementById('video-placeholder');
+            const analysisInfo = document.getElementById('analysis-info');
+            const errorMessage = document.getElementById('error-message');
+            const errorText = document.getElementById('error-text');
+            const uploadPrompt = document.getElementById('upload-prompt');
+            const fileNameDisplay = document.getElementById('file-name-display');
+            const statusText = document.getElementById('status-text');
+            const statusDot = document.getElementById('status-dot');
+            const resultsContainer = document.getElementById('results-container');
+            const resultsList = document.getElementById('results-list');
+
+            let uploadedVideoUrl = null;
+
+            // --- Event Listeners ---
+            videoInput.addEventListener('change', handleFileSelect);
+            form.addEventListener('submit', (e) => e.preventDefault());
+            startBtn.addEventListener('click', startAnalysis);
+            stopBtn.addEventListener('click', stopAnalysis);
+            processedStream.onload = () => { // The stream loaded successfully
+                console.log("Stream started.");
+            };
+            processedStream.onerror = () => { // This will fire when the stream is stopped or breaks
+                handleStreamEnd();
+            };
+
+            // --- Functions ---
+            function handleFileSelect() {
+                const file = videoInput.files[0];
+                if (file) {
+                    displayFileName(file.name);
+                    uploadFile(file);
+                }
+            }
+
+            function displayFileName(name) {
+                uploadPrompt.classList.add('hidden');
+                fileNameDisplay.textContent = name;
+                fileNameDisplay.classList.remove('hidden');
+            }
+
+            function uploadFile(file) {
+                updateStatus('Uploading...', 'yellow-400', true);
+                const formData = new FormData(form);
+                
+                fetch("{% url 'detector:home' %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'}
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        uploadedVideoUrl = data.video_url;
+                        showOriginalVideo(uploadedVideoUrl);
+                        startBtn.disabled = false;
+                        updateStatus('Ready for Analysis', 'green-400');
+                        hideError();
+                        resultsContainer.classList.add('hidden'); // Hide previous results
+                    } else {
+                        throw new Error(data.errors ? JSON.stringify(data.errors) : 'Upload failed.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError(`Upload failed: ${error.message}`);
+                    updateStatus('Upload Failed', 'red-400');
+                    resetUploadUI();
+                });
+            }
+
+            function showOriginalVideo(url) {
+                videoPlaceholder.classList.add('hidden');
+                originalVideo.src = url;
+                originalVideo.classList.remove('hidden');
+                processedStream.classList.add('hidden');
+                analysisInfo.textContent = 'Original video preview.';
+            }
+
+            function startAnalysis() {
+                if (!uploadedVideoUrl) {
+                    showError("No video has been successfully uploaded.");
+                    return;
+                }
+                updateStatus('Analyzing...', 'cyan-400', true);
+                resultsContainer.classList.add('hidden');
+                resultsList.innerHTML = '<p class="text-gray-400">Analysis is running...</p>';
+                originalVideo.classList.add('hidden');
+                originalVideo.pause();
+                processedStream.classList.remove('hidden');
+                
+                const streamUrl = `{% url 'detector:video_analysis_stream' %}?video_url=${encodeURIComponent(uploadedVideoUrl)}`;
+                processedStream.src = streamUrl;
+                
+                analysisInfo.textContent = 'Live analysis stream. Counts are overlaid on the video.';
+                startBtn.classList.add('hidden');
+                stopBtn.classList.remove('hidden');
+            }
+
+            function stopAnalysis() {
+                updateStatus('Analysis Stopped', 'green-400');
+                analysisInfo.textContent = 'Analysis stopped. Fetching final counts...';
+                resetToPreview();
+            }
+            
+            function handleStreamEnd() {
+                // This fires when the stream is stopped by the user or ends naturally.
+                // We only want to show this if the analysis was actually running.
+                if (statusText.textContent === 'Analyzing...') {
+                    updateStatus('Analysis Complete', 'green-400');
+                    analysisInfo.textContent = 'Analysis complete. Fetching final counts...';
+                    resetToPreview();
+                    fetchAndDisplayCounts(uploadedVideoUrl);
+                }
+            }
+
+            function fetchAndDisplayCounts(videoUrl) {
+                if (!videoUrl) return;
+
+                const countsUrl = `{% url 'detector:get_analysis_counts' %}?video_url=${encodeURIComponent(videoUrl)}`;
+                
+                fetch(countsUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        resultsContainer.classList.remove('hidden');
+                        analysisInfo.textContent = 'Final results:';
+                        const counts = data.counts || {};
+                        if (Object.keys(counts).length > 0) {
+                            resultsList.innerHTML = '';
+                            Object.entries(counts).forEach(([vehicle, count]) => {
+                                const resultItem = document.createElement('div');
+                                resultItem.className = 'flex justify-between items-center bg-gray-700 p-3 rounded-md';
+                                resultItem.innerHTML = `
+                                    <span class="font-medium text-gray-300 capitalize">${vehicle}</span>
+                                    <span class="font-bold text-lg text-cyan-400">${count}</span>`;
+                                resultsList.appendChild(resultItem);
+                            });
+                        } else {
+                            resultsList.innerHTML = '<p class="text-gray-400">No vehicles were counted during the analysis.</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error fetching counts:", error);
+                        resultsContainer.classList.remove('hidden');
+                        resultsList.innerHTML = '<p class="text-red-400">Could not retrieve final counts.</p>';
+                    });
+            }
+            
+            function updateStatus(text, color, pulse = false) {
+                statusText.textContent = text;
+                statusDot.className = `h-3 w-3 rounded-full bg-${color}`;
+                pulse ? statusDot.classList.add('status-badge') : statusDot.classList.remove('status-badge');
+            }
+
+            function showError(message) {
+                errorText.textContent = message;
+                errorMessage.classList.remove('hidden');
+            }
+
+            function hideError() {
+                errorMessage.classList.add('hidden');
+            }
+            
+            function resetUploadUI() {
+                uploadPrompt.classList.remove('hidden');
+                fileNameDisplay.classList.add('hidden');
+                fileNameDisplay.textContent = '';
+                videoInput.value = '';
+            }
+
+            function resetToPreview() {
+                processedStream.src = ''; // This is the key action to stop the stream
+                processedStream.classList.add('hidden');
+                originalVideo.classList.remove('hidden');
+                
+                stopBtn.classList.add('hidden');
+                startBtn.classList.remove('hidden');
+                startBtn.disabled = !uploadedVideoUrl;
+
+                // Since we are resetting, it's a good time to fetch counts
+                fetchAndDisplayCounts(uploadedVideoUrl);
+            }
+        });
+    </script>
+</body>
+</html>
