@@ -22,7 +22,6 @@ pip install -r requirements.txt
 ### 2. Navigate to project folder
 ```bash
 cd DeltaAnalysis
-pip install -r requirements.txt
 ```
 
 ### 3. Set Up Environment Variables
