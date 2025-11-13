@@ -30,6 +30,8 @@ docling
 openai>=1.0.0
 google-generativeai
 tiktoken
+ultralytics
+deep_sort_realtime
 
 # Utilities
 python-dotenv>=1.0.0
