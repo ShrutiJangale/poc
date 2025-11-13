@@ -4,35 +4,57 @@ A Django web application for analyzing procurement and true-up data using semant
 
 ## Setup Instructions
 
-### 1. Activate Virtual Environment
+### 1. Navigate to Project Directory
 
-If you haven't already activated your virtual environment:
+First, navigate to the `deltaAnalysis` folder:
+
+```bash
+cd poc/deltaAnalysis
+```
 
 **Windows (PowerShell):**
 ```powershell
+cd poc\deltaAnalysis
+```
+
+**Windows (Command Prompt):**
+```cmd
+cd poc\deltaAnalysis
+```
+
+### 2. Set Up Virtual Environment
+
+If you haven't already created a virtual environment, create one:
+
+**Windows (PowerShell):**
+```powershell
+python -m venv venv
 .\venv\Scripts\Activate.ps1
 ```
 
 **Windows (Command Prompt):**
 ```cmd
+python -m venv venv
 venv\Scripts\activate.bat
 ```
 
-### 2. Install Dependencies
+**Linux/Mac:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-Make sure you're in the `DeltaAnalysis` directory and your virtual environment is activated:
+### 3. Install Dependencies
+
+Make sure you're in the `deltaAnalysis` directory and your virtual environment is activated:
 
 ```bash
-cd DeltaAnalysis
 pip install -r requirements.txt
 ```
 
-### 3. Set Up Environment Variables
+### 4. Set Up Environment Variables
 
-1. Copy the example environment file:
-   ```bash
-   copy .env.example .env
-   ```
+1. Create a `.env` file in the `deltaAnalysis` directory (if it doesn't exist)
 
 2. Edit `.env` file and add your OpenAI API key:
    ```
@@ -41,13 +63,13 @@ pip install -r requirements.txt
 
    **Get your API key from:** https://platform.openai.com/api-keys
 
-### 4. Run Database Migrations
+### 5. Run Database Migrations
 
 ```bash
 python manage.py migrate
 ```
 
-### 5. Create a Superuser (Optional)
+### 6. Create a Superuser (Optional)
 
 If you want to access the Django admin panel:
 
@@ -55,7 +77,7 @@ If you want to access the Django admin panel:
 python manage.py createsuperuser
 ```
 
-### 6. Run the Development Server
+### 7. Run the Development Server
 
 ```bash
 python manage.py runserver
