@@ -2,33 +2,21 @@
 
 Step-by-step guide to set up and run the app locally.
 
-### Project Structure (key parts)
-```
-royalFinanceDemo/
-├─ royalfinanceAI/
-│  ├─ manage.py
-│  ├─ bankstatement_project/
-│  └─ statement_analyzer/
-└─ venv/  (created locally; ignored by git)
-```
-
-### 1) Clone or open the project
-If you're starting from this folder already, skip to step 2.
-```bash
-git clone "https://github.com/ShrutiJangale/royalFinanceDemo.git"
-cd royalFinanceDemo
-```
-
-### 2) Create and activate a virtual environment 
+### 1) Create and activate a virtual environment 
 ```bash
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 ```
 
-### 3) Install dependencies
+### 2) Install dependencies
 ```bash
 cd .\royalfinanceAI\
 pip install -r requirements.txt
+```
+
+### 2) Navigate to project folder
+```bash
+cd .\royalfinanceAI\
 ```
 
 ### 4) Environment variables
