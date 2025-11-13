@@ -1,14 +1,6 @@
 # Delta Analysis Project
 
-A Django web application for analyzing procurement and true-up data using semantic matching with OpenAI.
-
-## Setup Instructions
-
-
-```bash
-cd DeltaAnalysis
-pip install -r requirements.txt
-```
+A Django web application for analyzing procurement and true-up data using semantic matching with OpenAI
 
 ### 1. Activate Virtual Environment
 
@@ -27,9 +19,15 @@ venv\Scripts\activate.bat
 pip install -r requirements.txt
 ```
 
-### 2. Set Up Environment Variables
+### 2. Navigate to project folder
+```bash
+cd DeltaAnalysis
+pip install -r requirements.txt
+```
 
-1. Edit `.env` file and add your OpenAI API key:
+### 3. Set Up Environment Variables
+
+ Edit `.env` file and add your OpenAI API key:
    ```
    OPENAI_API_KEY=sk-your-actual-api-key-here
    ```
