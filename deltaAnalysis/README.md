@@ -1,8 +1,6 @@
 # Delta Analysis Project
 
-A Django web application for analyzing procurement and true-up data using semantic matching with OpenAI.
-
-## Setup Instructions
+A Django web application for analyzing procurement and true-up data using semantic matching with OpenAI
 
 ### 1. Navigate to Project Directory
 
@@ -37,7 +35,11 @@ python -m venv venv
 python -m venv venv
 venv\Scripts\activate.bat
 ```
+```bash
+pip install -r requirements.txt
+```
 
+<<<<<<< HEAD
 **Linux/Mac:**
 ```bash
 python3 -m venv venv
@@ -50,26 +52,43 @@ Make sure you're in the `deltaAnalysis` directory and your virtual environment i
 
 ```bash
 pip install -r requirements.txt
+=======
+### 2. Navigate to project folder
+```bash
+cd DeltaAnalysis
+>>>>>>> f0211e100caee46c3a057187c4c42ecb1c2549e1
 ```
 
 ### 4. Set Up Environment Variables
 
+<<<<<<< HEAD
 1. Create a `.env` file in the `deltaAnalysis` directory (if it doesn't exist)
 
 2. Edit `.env` file and add your OpenAI API key:
+=======
+ Edit `.env` file and add your OpenAI API key:
+>>>>>>> f0211e100caee46c3a057187c4c42ecb1c2549e1
    ```
    OPENAI_API_KEY=sk-your-actual-api-key-here
    ```
 
+<<<<<<< HEAD
    **Get your API key from:** https://platform.openai.com/api-keys
 
 ### 5. Run Database Migrations
+=======
+### 3. Run Database Migrations
+>>>>>>> f0211e100caee46c3a057187c4c42ecb1c2549e1
 
 ```bash
 python manage.py migrate
 ```
 
+<<<<<<< HEAD
 ### 6. Create a Superuser (Optional)
+=======
+### 4. Create a Superuser (Optional)
+>>>>>>> f0211e100caee46c3a057187c4c42ecb1c2549e1
 
 If you want to access the Django admin panel:
 
@@ -77,7 +96,11 @@ If you want to access the Django admin panel:
 python manage.py createsuperuser
 ```
 
+<<<<<<< HEAD
 ### 7. Run the Development Server
+=======
+### 5. Run the Development Server
+>>>>>>> f0211e100caee46c3a057187c4c42ecb1c2549e1
 
 ```bash
 python manage.py runserver
@@ -85,25 +108,4 @@ python manage.py runserver
 
 The application will be available at: http://127.0.0.1:8000/
 
-## Project Structure
-
-- `analysis_app/` - Main Django app for file upload and analysis
-- `psananalysis_project/` - Django project settings
-- `Files/` - Sample Excel files for testing
-- `manage.py` - Django management script
-
-## Usage
-
-1. Navigate to http://127.0.0.1:8000/
-2. Upload two Excel files:
-   - Procurement Sheet (should contain: Description, Unit Cost, Quantity Ordered columns)
-   - True Up Sheet (should contain: Type, Description, QTY, Size columns)
-3. The application will analyze and match items using semantic similarity
-4. View the delta analysis results
-
-## Notes
-
-- Make sure your Excel files have the correct column names
-- The application uses OpenAI API for semantic matching (costs apply)
-- Debug mode is enabled by default (DEBUG=True in settings.py)
 
